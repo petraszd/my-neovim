@@ -14,7 +14,8 @@ Plug 'git@github.com:/sirver/ultisnips'
 Plug 'git@github.com:/honza/vim-snippets'
 Plug 'git@github.com:ziglang/zig.vim.git'
 Plug 'git@github.com:hrsh7th/nvim-compe.git'
-
+Plug 'git@github.com:mhinz/vim-grepper.git'
+Plug 'git@github.com:prettier/vim-prettier.git'
 
 call plug#end()
 
@@ -29,6 +30,7 @@ set number
 set hlsearch
 set t_Co=256
 colorscheme lucius
+
 
 
 " Behaviour
@@ -98,7 +100,11 @@ require('my-lsp/clangd')
 require('my-lsp/pylsp')
 require('my-lsp/zig')
 require('my-lsp/omnisharp')
+require('my-lsp/eslint')
+require('my-lsp/tsserver')
 EOF
+
+nmap <F2> :lua vim.lsp.buf.rename()<CR>
 
 
 " Plugins Configs
@@ -109,7 +115,6 @@ nmap <space>p :FZF<CR>
 
 " NERDCommenter
 let g:mapleader = ','
-
 
 " Buffet
 command B Bufferlistsw
@@ -127,6 +132,7 @@ let g:UltiSnipsListSnippets = '\<C-j>'
 let g:UltiSnipsJumpForwardTrigger = '\<C-j>'
 let g:UltiSnipsJumpBackwardTrigger = '\<C-k>'
 
+" nvim-compe
 let g:compe = {}
 let g:compe.enabled = v:true
 let g:compe.autocomplete = v:true
@@ -155,4 +161,14 @@ inoremap <silent><expr> <C-e>     compe#close('<C-e>')
 
 lua << EOF
 require('compe/tab')
+EOF
+
+" grepper
+let g:grepper = {}
+let g:grepper.quickfix = 1
+let g:grepper.tools = ['rg']
+let g:grepper.highlight = 1
+
+lua << EOF
+require('grepper/f5')
 EOF
