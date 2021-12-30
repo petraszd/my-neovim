@@ -104,6 +104,7 @@ require('my-lsp/zig')
 require('my-lsp/omnisharp')
 require('my-lsp/eslint')
 require('my-lsp/tsserver')
+require('my-lsp/cssls')
 EOF
 
 nmap <F2> :lua vim.lsp.buf.rename()<CR>
