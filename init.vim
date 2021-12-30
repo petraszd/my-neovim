@@ -16,6 +16,8 @@ Plug 'git@github.com:ziglang/zig.vim.git'
 Plug 'git@github.com:hrsh7th/nvim-compe.git'
 Plug 'git@github.com:mhinz/vim-grepper.git'
 Plug 'git@github.com:prettier/vim-prettier.git'
+Plug 'git@github.com:MaxMEllon/vim-jsx-pretty.git'
+Plug 'git@github.com:Vimjas/vim-python-pep8-indent.git'
 
 call plug#end()
 
