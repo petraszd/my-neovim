@@ -18,6 +18,7 @@ Plug 'git@github.com:mhinz/vim-grepper.git'
 Plug 'git@github.com:prettier/vim-prettier.git'
 Plug 'git@github.com:MaxMEllon/vim-jsx-pretty.git'
 Plug 'git@github.com:Vimjas/vim-python-pep8-indent.git'
+Plug 'git@github.com:habamax/vim-godot.git'
 
 call plug#end()
 
@@ -105,6 +106,7 @@ require('my-lsp/omnisharp')
 require('my-lsp/eslint')
 require('my-lsp/tsserver')
 require('my-lsp/cssls')
+require('my-lsp/godot')
 EOF
 
 nmap <F2> :lua vim.lsp.buf.rename()<CR>
