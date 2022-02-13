@@ -87,7 +87,7 @@ set shiftwidth=2 " number of spaces used with (auto) indent,
 " FileType
 " --------
 
-au FileType python,c,cpp,java,cg setlocal shiftwidth=4 tabstop=4 et
+au FileType python,c,cpp,java,cg,gdscript setlocal shiftwidth=4 tabstop=4 et
 
 " Make
 autocmd FileType make setlocal noexpandtab
