@@ -4,8 +4,8 @@
 call plug#begin(stdpath('data') . '/plugged')
 
 Plug 'git@github.com:junegunn/fzf.git'
+Plug 'git@github.com:junegunn/fzf.vim.git'
 Plug 'git@github.com:scrooloose/nerdtree.git'
-Plug 'git@github.com:vim-scripts/buffet.vim.git'
 Plug 'git@github.com:scrooloose/nerdcommenter.git'
 Plug 'git@github.com:vim-scripts/Lucius.git'
 Plug 'git@github.com:vim-airline/vim-airline.git'
@@ -61,7 +61,6 @@ nmap <space>o <C-w>o
 nmap <space>s :wa<CR>
 
 nmap <space>e :Ex<CR>
-nmap <space>b :B<CR>
 
 inoremap kk <C-p>
 inoremap jj <C-n>
@@ -119,11 +118,11 @@ nmap <F3> :lua vim.lsp.buf.definition()<CR>
 " FZF
 nmap <space>p :FZF<CR>
 
+" FZF.vim
+nmap <space>b :Buffers<CR>
+
 " NERDCommenter
 let g:mapleader = ','
-
-" Buffet
-command B Bufferlistsw
 
 " NERDTree
 command Ex execute "e " . expand("%:p:h")
