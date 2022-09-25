@@ -9,19 +9,25 @@ Plug 'git@github.com:scrooloose/nerdtree.git'
 Plug 'git@github.com:scrooloose/nerdcommenter.git'
 Plug 'git@github.com:vim-scripts/Lucius.git'
 Plug 'git@github.com:vim-airline/vim-airline.git'
-Plug 'git@github.com:neovim/nvim-lspconfig'
-Plug 'git@github.com:/sirver/ultisnips'
-Plug 'git@github.com:/honza/vim-snippets'
 Plug 'git@github.com:ziglang/zig.vim.git'
-Plug 'git@github.com:hrsh7th/nvim-compe.git'
 Plug 'git@github.com:mhinz/vim-grepper.git'
 Plug 'git@github.com:prettier/vim-prettier.git'
 Plug 'git@github.com:MaxMEllon/vim-jsx-pretty.git'
 Plug 'git@github.com:Vimjas/vim-python-pep8-indent.git'
 Plug 'git@github.com:habamax/vim-godot.git'
+Plug 'git@github.com:EdenEast/nightfox.nvim.git'
+
+Plug 'git@github.com:neovim/nvim-lspconfig'
+Plug 'git@github.com:hrsh7th/cmp-nvim-lsp'
+Plug 'git@github.com:hrsh7th/cmp-buffer'
+Plug 'git@github.com:hrsh7th/cmp-path'
+Plug 'git@github.com:hrsh7th/cmp-cmdline'
+Plug 'git@github.com:hrsh7th/nvim-cmp'
+Plug 'git@github.com:hrsh7th/cmp-vsnip'
+Plug 'git@github.com:hrsh7th/vim-vsnip'
+Plug 'git@github.com:rafamadriz/friendly-snippets.git'
 
 call plug#end()
-
 
 
 " Look
@@ -32,8 +38,11 @@ set textwidth=119
 set number
 set hlsearch
 set t_Co=256
-colorscheme lucius
-
+set termguicolors
+lua << EOF
+require('nightfox').setup({})
+EOF
+colorscheme nordfox
 
 
 " Behaviour
@@ -97,19 +106,15 @@ autocmd FileType make setlocal shiftwidth=8 shiftwidth=8 tabstop=8
 " LSP
 " ---
 
-lua << EOF
-require('my-lsp/clangd')
-require('my-lsp/pylsp')
-require('my-lsp/zig')
-require('my-lsp/omnisharp')
-require('my-lsp/eslint')
-require('my-lsp/tsserver')
-require('my-lsp/cssls')
-require('my-lsp/godot')
-EOF
-
 nmap <F2> :lua vim.lsp.buf.rename()<CR>
 nmap <F3> :lua vim.lsp.buf.definition()<CR>
+nmap <F6> :lua vim.lsp.buf.hover()<CR>
+
+set completeopt=menu,menuone,noselect
+
+lua <<EOF
+require('my-lsp/init')
+EOF
 
 
 " Plugins Configs
@@ -129,44 +134,6 @@ command Ex execute "e " . expand("%:p:h")
 let g:loaded_netrw = 1
 let g:loaded_netrwPlugin = 1
 let g:NERDTreeQuitOnOpen = 1
-
-" UltiSnips
-" <tab> conflicts with completion
-let g:UltiSnipsExpandTrigger = '\<C-j>'
-let g:UltiSnipsListSnippets = '\<C-j>'
-let g:UltiSnipsJumpForwardTrigger = '\<C-j>'
-let g:UltiSnipsJumpBackwardTrigger = '\<C-k>'
-
-" nvim-compe
-let g:compe = {}
-let g:compe.enabled = v:true
-let g:compe.autocomplete = v:true
-let g:compe.debug = v:false
-let g:compe.min_length = 2
-let g:compe.preselect = 'enable'
-let g:compe.throttle_time = 80
-let g:compe.source_timeout = 200
-let g:compe.incomplete_delay = 400
-let g:compe.max_abbr_width = 100
-let g:compe.max_kind_width = 100
-let g:compe.max_menu_width = 100
-let g:compe.documentation = v:true
-
-let g:compe.source = {}
-let g:compe.source.path = v:true
-let g:compe.source.buffer = v:true
-let g:compe.source.calc = v:true
-let g:compe.source.nvim_lsp = v:true
-let g:compe.source.nvim_lua = v:true
-let g:compe.source.ultisnips = v:true
-
-inoremap <silent><expr> <C-Space> compe#complete()
-inoremap <silent><expr> <CR>      compe#confirm('<CR>')
-inoremap <silent><expr> <C-e>     compe#close('<C-e>')
-
-lua << EOF
-require('compe/tab')
-EOF
 
 " grepper
 let g:grepper = {}
