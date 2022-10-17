@@ -1,5 +1,5 @@
 -- Set up nvim-cmp.
-local cmp = require('cmp')
+local cmp = require'cmp'
 
 cmp.setup({
   snippet = {
@@ -7,6 +7,10 @@ cmp.setup({
     expand = function(args)
       vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
     end,
+  },
+  window = {
+    -- completion = cmp.config.window.bordered(),
+    -- documentation = cmp.config.window.bordered(),
   },
   mapping = cmp.mapping.preset.insert({
     ['<C-b>'] = cmp.mapping.scroll_docs(-4),
@@ -32,9 +36,6 @@ cmp.setup({
   sources = cmp.config.sources({
     { name = 'nvim_lsp' },
     { name = 'vsnip' }, -- For vsnip users.
-    -- { name = 'luasnip' }, -- For luasnip users.
-    -- { name = 'ultisnips' }, -- For ultisnips users.
-    -- { name = 'snippy' }, -- For snippy users.
   }, {
     { name = 'buffer' },
   })
@@ -50,14 +51,12 @@ cmp.setup.filetype('gitcommit', {
 })
 
 -- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
-for _,v in pairs({ '/', '?' }) do
-  cmp.setup.cmdline(v, {
-    mapping = cmp.mapping.preset.cmdline(),
-    sources = {
-      { name = 'buffer' }
-    }
-  })
-end
+cmp.setup.cmdline({ '/', '?' }, {
+  mapping = cmp.mapping.preset.cmdline(),
+  sources = {
+    { name = 'buffer' }
+  }
+})
 
 -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
 cmp.setup.cmdline(':', {
@@ -73,7 +72,7 @@ cmp.setup.cmdline(':', {
 local lsp_cfg = require('lspconfig')
 local lsp_util = require('lspconfig.util')
 local cmp_nvim_lsp = require('cmp_nvim_lsp')
-local capabilities = cmp_nvim_lsp.update_capabilities(vim.lsp.protocol.make_client_capabilities())
+local capabilities = cmp_nvim_lsp.default_capabilities(vim.lsp.protocol.make_client_capabilities())
 
 lsp_cfg.clangd.setup({
   capabilities = capabilities
@@ -101,8 +100,9 @@ lsp_cfg.zls.setup({
   capabilities = capabilities,
 })
 
-local cssls_capabilities = cmp_nvim_lsp.update_capabilities(vim.lsp.protocol.make_client_capabilities())
-cssls_capabilities.textDocument.completion.completionItem.snippetSupport = true
+local cssls_capabilities = cmp_nvim_lsp.default_capabilities(vim.lsp.protocol.make_client_capabilities())
+cssls_capabilities.textDocument.completion.completionItem = { snippetSupport = true }
 lsp_cfg.cssls.setup({
   capabilities = cssls_capabilities,
 })
+

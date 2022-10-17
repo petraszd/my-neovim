@@ -106,16 +106,17 @@ autocmd FileType make setlocal shiftwidth=8 shiftwidth=8 tabstop=8
 " LSP
 " ---
 
-nmap <F1> :lua vim.lsp.buf.hover()<CR>
-nmap <F2> :lua vim.lsp.buf.rename()<CR>
-nmap <F3> :lua vim.lsp.buf.definition()<CR>
-nmap <F4> :lua vim.lsp.buf.formatter()<CR>
-
 set completeopt=menu,menuone,noselect
 
 lua <<EOF
-require('my-lsp/init')
+require('my-lsp')
+require('my-hover')
 EOF
+
+nmap <F1> :lua pz_hover()<CR>
+nmap <F2> :lua vim.lsp.buf.rename()<CR>
+nmap <F3> :lua vim.lsp.buf.definition()<CR>
+nmap <F4> :lua vim.lsp.buf.format()<CR>
 
 
 " Plugins Configs
