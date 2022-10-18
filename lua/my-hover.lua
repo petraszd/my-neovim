@@ -15,7 +15,10 @@ _G.pz_hover = function()
   elseif hover_float_id == nil then
     _hover()
   else
-    -- TODO: maybe show other matches. Example foobar(a: int); foobar(a: int, b: int); etc.
+    -- TODO: I've not figured out how to show overloaded matches:
+    -- foobar(a: int);
+    -- foobar(a: int, b: int);
+    -- etc.
     vim.api.nvim_win_close(hover_float_id, false)
   end
 end
@@ -34,9 +37,7 @@ function _get_floating_win_ids()
   local windows = vim.api.nvim_list_wins()
   for i = 1, #windows do
     if _is_floating(windows[i]) then
-      local buf_id = vim.api.nvim_win_get_buf(windows[i])
-      local lines = vim.api.nvim_buf_get_lines(buf_id, 0, 1, false)
-      if lines[1] == "Diagnostics:" then
+      if _is_error_float(windows[i]) then
         error_float_id = windows[i]
       else
         hover_float_id = windows[i]
@@ -49,5 +50,12 @@ end
 
 function _is_floating(win_id)
   local cfg = vim.api.nvim_win_get_config(win_id)
-  return cfg.zindex ~= nil and cfg.zindex > 1
+  return cfg.relative ~= ''
 end
+
+function _is_error_float(win_id)
+  local buf_id = vim.api.nvim_win_get_buf(win_id)
+  local lines = vim.api.nvim_buf_get_lines(buf_id, 0, 1, false)
+  return lines[1] == "Diagnostics:"  -- Yeah... I know...
+end
+

@@ -6,7 +6,3 @@ _G.pz_search_using_grepper = function()
   end
   vim.api.nvim_command("GrepperRg " .. search_str)
 end
-
-
-vim.api.nvim_set_keymap("n", "<F5>", "<CMD>lua pz_search_using_grepper()<CR>", {})
-vim.api.nvim_set_keymap("v", "<F5>", "<CMD>lua pz_search_using_grepper()<CR>", {})

@@ -74,15 +74,9 @@ local lsp_util = require('lspconfig.util')
 local cmp_nvim_lsp = require('cmp_nvim_lsp')
 local capabilities = cmp_nvim_lsp.default_capabilities(vim.lsp.protocol.make_client_capabilities())
 
-lsp_cfg.clangd.setup({
-  capabilities = capabilities
-})
-lsp_cfg.eslint.setup({
-  capabilities = capabilities
-})
-lsp_cfg.gdscript.setup({
-  capabilities = capabilities
-})
+lsp_cfg.clangd.setup({ capabilities = capabilities })
+lsp_cfg.eslint.setup({ capabilities = capabilities })
+lsp_cfg.gdscript.setup({ capabilities = capabilities })
 lsp_cfg.omnisharp.setup({
   capabilities = capabilities,
   cmd = { "/usr/local/bin/omnisharp", "--languageserver" , "--hostPID", tostring(vim.fn.getpid()) }, -- TODO: bin is wrong
@@ -90,19 +84,10 @@ lsp_cfg.omnisharp.setup({
     return lsp_util.root_pattern("*.csproj", "*.sln")(fname)
   end,
 })
-lsp_cfg.pylsp.setup({
-  capabilities = capabilities,
-})
-lsp_cfg.tsserver.setup({
-  capabilities = capabilities,
-})
-lsp_cfg.zls.setup({
-  capabilities = capabilities,
-})
+lsp_cfg.pylsp.setup({ capabilities = capabilities })
+lsp_cfg.tsserver.setup({ capabilities = capabilities })
+lsp_cfg.zls.setup({ capabilities = capabilities })
 
 local cssls_capabilities = cmp_nvim_lsp.default_capabilities(vim.lsp.protocol.make_client_capabilities())
 cssls_capabilities.textDocument.completion.completionItem = { snippetSupport = true }
-lsp_cfg.cssls.setup({
-  capabilities = cssls_capabilities,
-})
-
+lsp_cfg.cssls.setup({ capabilities = cssls_capabilities })
