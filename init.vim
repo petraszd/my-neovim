@@ -109,14 +109,15 @@ autocmd FileType make setlocal shiftwidth=8 shiftwidth=8 tabstop=8
 set completeopt=menu,menuone,noselect
 
 lua <<EOF
-require('my-lsp')
-require('my-hover')
+require('pz-lsp')
+require('pz-hover')
+require('pz-format')
 EOF
 
 nmap <F1> :lua pz_hover()<CR>
 nmap <F2> :lua vim.lsp.buf.rename()<CR>
-nmap <F3> :lua vim.lsp.buf.implementation()<CR>
-nmap <F4> :lua vim.lsp.buf.format()<CR>
+nmap <F3> :lua vim.lsp.buf.declaration()<CR>
+nmap <F4> :lua pz_format()<CR>
 
 
 " Plugins Configs
@@ -144,7 +145,7 @@ let g:grepper.tools = ['rg']
 let g:grepper.highlight = 1
 
 lua << EOF
-require('my-grepper')
+require('pz-grepper')
 EOF
 
 nmap <F5> :lua pz_search_using_grepper()<CR>
