@@ -116,8 +116,9 @@ EOF
 
 nmap <F1> :lua pz_hover()<CR>
 nmap <F2> :lua vim.lsp.buf.rename()<CR>
-nmap <F3> :lua vim.lsp.buf.declaration()<CR>
+nmap <F3> :lua vim.lsp.buf.definition()<CR>
 nmap <F4> :lua pz_format()<CR>
+
 
 
 " Plugins Configs

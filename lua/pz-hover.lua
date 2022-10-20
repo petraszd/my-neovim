@@ -1,8 +1,10 @@
 _G.pz_hover = function()
-  error_float_id, hover_float_id = _get_floating_win_ids()
+  local error_float_id, hover_float_id = _get_floating_win_ids()
 
-  local is_error_in_line = next(vim.lsp.diagnostic.get_line_diagnostics())
-  if is_error_in_line then
+  -- get_cursor returns 1-indexed number and diagnostic.get requires 0-indexed.
+  local lnum = vim.api.nvim_win_get_cursor(0)[1] - 1
+  local line_errors = vim.diagnostic.get(0, { lnum = lnum })
+  if not vim.tbl_isempty(line_errors) then
     if error_float_id ~= nil then
       vim.api.nvim_win_close(error_float_id, false)
       _hover()
