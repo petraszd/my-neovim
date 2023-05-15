@@ -1,2 +1,3 @@
 .netrwhist
-lua/pz-custom-lsp-configs.lua
+lua/pz/custom_lsp_configs.lua
+lazy-lock.json

@@ -1,7 +1,0 @@
-local M = {}
-
-function M.pylsp(options)
-  return options
-end
-
-return M

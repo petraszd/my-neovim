@@ -1,0 +1,7 @@
+local _M = {}
+
+_M.zls = function(settings)
+  return settings
+end
+
+return _M
