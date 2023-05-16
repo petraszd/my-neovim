@@ -1,6 +1,7 @@
 --  This function gets run when an LSP connects to a particular buffer.
 
-local on_attach = function(_, bufnr)
+local on_attach = function(client, bufnr)
+
   local nmap = function(keys, func, desc)
     if desc then
       desc = 'LSP: ' .. desc
@@ -10,10 +11,12 @@ local on_attach = function(_, bufnr)
   end
 
   nmap('<leader>h', require('pz/hover').pz_hover, '[H]over')
+  nmap('<leader>r', function()
+    require('pz/format').pz_format(bufnr)
+  end, 'Fo[r]mat')
 
   nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
   nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
-
 
   nmap('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
   nmap('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
@@ -32,6 +35,7 @@ local servers = {
   eslint = {},
   tsserver = {},
   zls = {},
+  pylsp = {}, -- TODO: find a better Python LSP
   lua_ls = {
     Lua = {
       workspace = { checkThirdParty = false },

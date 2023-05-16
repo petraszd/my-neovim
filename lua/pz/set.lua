@@ -17,7 +17,7 @@ vim.opt.timeoutlen = 300
 vim.opt.termguicolors = true
 
 vim.api.nvim_create_autocmd({ 'FileType' }, {
-  pattern = { 'lua' },
+  pattern = { 'lua', 'typescript', 'typescriptreact', 'javascript', 'javascriptreact' },
   callback = function()
     vim.opt.tabstop = 2
     vim.opt.shiftwidth = 2

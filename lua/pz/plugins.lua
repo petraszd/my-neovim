@@ -93,6 +93,7 @@ require('lazy').setup({
   },
 
   {
+    -- Colorscheme
     'folke/tokyonight.nvim',
     config = function()
       vim.cmd.colorscheme('tokyonight-moon')
