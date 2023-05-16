@@ -47,7 +47,10 @@ _M.pz_format = function(bufnr)
   if is_prettier_buffer(bufnr) then
     format_using_pretter(bufnr)
   else
-    vim.lsp.buf.format({ timeout_ms = 10000, bufnr = bufnr })
+    vim.lsp.buf.format({
+      bufnr = bufnr,
+      timeout_ms = 10000,
+    })
   end
 end
 
