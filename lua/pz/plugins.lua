@@ -125,6 +125,10 @@ require('nvim-treesitter.configs').setup({
   -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
   auto_install = false,
 
+  indent = {
+    enable = true
+  },
+
   highlight = {
     enable = true,
     additional_vim_regex_highlighting = false,
