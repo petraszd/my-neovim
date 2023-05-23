@@ -1,5 +1,5 @@
 -- Setup lazy.nvim plugin manager
-local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
+local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system {
     'git',
@@ -28,13 +28,21 @@ require('lazy').setup({
   },
 
   {
+    -- Snippets
+    'L3MON4D3/LuaSnip',
+    config = function()
+      local snippets_path = vim.fn.stdpath("config") .. "/snippets"
+      require("luasnip.loaders.from_lua").load({ paths = snippets_path })
+    end,
+  },
+
+  {
     -- Autocompletion
     'hrsh7th/nvim-cmp',
     dependencies = {
       'hrsh7th/cmp-nvim-lsp',
       'hrsh7th/cmp-buffer',
       'hrsh7th/cmp-path',
-      'L3MON4D3/LuaSnip',
       'saadparwaiz1/cmp_luasnip',
     },
   },
@@ -56,12 +64,18 @@ require('lazy').setup({
         section_separators = '',
       },
       sections = {
-        lualine_a = { "mode" },
-        lualine_b = { { "filename", path = 1 } },
-        lualine_c = {},
-        lualine_x = { "encoding", "fileformat", "filetype" },
-        lualine_y = { "progress" },
-        lualine_z = { "location" }
+        lualine_a = { 'mode' },
+        lualine_b = { { 'filename', path = 1 } },
+        lualine_c = {
+          {
+            'diagnostics',
+            sections = { 'error', 'warn' },
+            sources = { 'nvim_diagnostic' },
+          },
+        },
+        lualine_x = { 'encoding', 'fileformat', 'filetype' },
+        lualine_y = { 'progress' },
+        lualine_z = { 'location' }
       },
     },
   },
@@ -104,6 +118,16 @@ require('lazy').setup({
     -- Colorscheme
     'folke/tokyonight.nvim',
     config = function()
+      require('tokyonight').setup({
+        style = 'moon',
+        on_highlights = function(highlights, colors)
+          local util = require('tokyonight.util')
+          highlights['DiagnosticUnnecessary'] = {
+            bg = util.blend(colors['fg'], colors['bg'], 0.2),
+            underline = true,
+          }
+        end,
+      })
       vim.cmd.colorscheme('tokyonight-moon')
     end,
   },
