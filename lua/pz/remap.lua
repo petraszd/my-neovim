@@ -14,7 +14,12 @@ local telescope_builtin = require('telescope.builtin')
 local telescope_themes = require('telescope.themes')
 
 -- See `:help telescope.builtin`
-vim.keymap.set('n', '<leader>b', telescope_builtin.buffers, { desc = 'Find existing [B]uffers' })
+vim.keymap.set('n', '<leader>b', function()
+  telescope_builtin.buffers({
+    sort_lastused = true,
+    sort_mru = true,
+  })
+end, { desc = 'Find existing [B]uffers' })
 vim.keymap.set('n', '<leader>/', function()
   -- You can pass additional configuration to telescope to change theme, layout, etc.
   telescope_builtin.current_buffer_fuzzy_find(
