@@ -115,6 +115,10 @@ require('lazy').setup({
   },
 
   {
+    'nvim-treesitter/playground',
+  },
+
+  {
     -- Colorscheme
     'folke/tokyonight.nvim',
     config = function()
@@ -152,7 +156,7 @@ pcall(require('telescope').load_extension, 'fzf')
 -- [[ Treesitter ]]
 require('nvim-treesitter.configs').setup({
   -- Add languages to be installed here that you want installed for treesitter
-  ensure_installed = { 'c', 'lua', 'python', 'tsx', 'typescript' },
+  ensure_installed = { 'c', 'lua', 'python', 'tsx', 'typescript', 'query' },
 
   -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
   auto_install = false,
