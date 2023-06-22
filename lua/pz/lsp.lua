@@ -1,7 +1,6 @@
 --  This function gets run when an LSP connects to a particular buffer.
 
 local on_attach = function(client, bufnr)
-
   local nmap = function(keys, func, desc)
     if desc then
       desc = 'LSP: ' .. desc
@@ -27,7 +26,6 @@ local on_attach = function(client, bufnr)
 
   -- Lesser used LSP functionality
   nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
-
 end
 
 local servers = {
@@ -36,6 +34,8 @@ local servers = {
   tsserver = {},
   zls = {},
   pylsp = {}, -- TODO: find a better Python LSP
+  cssls = {
+  },
   lua_ls = {
     Lua = {
       workspace = { checkThirdParty = false },
@@ -52,8 +52,10 @@ if not has_custom_configs then
 end
 
 -- nvim-cmp supports additional completion capabilities, so broadcast that to servers
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
+local lsp_capabilities = vim.lsp.protocol.make_client_capabilities()
+local capabilities = require('cmp_nvim_lsp').default_capabilities(lsp_capabilities)
+local cssls_capabilities = require('cmp_nvim_lsp').default_capabilities(lsp_capabilities)
+cssls_capabilities.textDocument.completion.completionItem.snippetSupport = true
 
 -- Ensure the servers above are installed
 local mason_lspconfig = require('mason-lspconfig')
@@ -68,8 +70,13 @@ mason_lspconfig.setup_handlers {
     if custom_configs[server_name] ~= nil then
       settings = custom_configs[server_name](settings)
     end
+
+    local server_capabilities = capabilities
+    if server_name == "cssls" then
+      server_capabilities = cssls_capabilities
+    end
     require('lspconfig')[server_name].setup({
-      capabilities = capabilities,
+      capabilities = server_capabilities,
       on_attach = on_attach,
       settings = settings,
     })
@@ -77,10 +84,10 @@ mason_lspconfig.setup_handlers {
 }
 
 -- nvim-cmp setup
-local cmp = require 'cmp'
-local luasnip = require 'luasnip'
+local cmp = require('cmp')
+local luasnip = require('luasnip')
 
-luasnip.config.setup {}
+luasnip.config.setup({})
 
 cmp.setup {
   snippet = {
