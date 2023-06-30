@@ -1,7 +1,10 @@
 local _M = {}
 
-_M.zls = function(settings)
-  return settings
+_M.lang_server = function(config)
+  config.settings = {
+    foo = "bar",
+  }
+  return config
 end
 
 return _M

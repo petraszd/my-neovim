@@ -34,8 +34,8 @@ local servers = {
   tsserver = {},
   zls = {},
   pylsp = {}, -- TODO: find a better Python LSP
-  cssls = {
-  },
+  cssls = {},
+  sqlls = {},
   lua_ls = {
     Lua = {
       workspace = { checkThirdParty = false },
@@ -67,19 +67,20 @@ mason_lspconfig.setup {
 mason_lspconfig.setup_handlers {
   function(server_name)
     local settings = servers[server_name]
-    if custom_configs[server_name] ~= nil then
-      settings = custom_configs[server_name](settings)
-    end
 
     local server_capabilities = capabilities
     if server_name == "cssls" then
       server_capabilities = cssls_capabilities
     end
-    require('lspconfig')[server_name].setup({
+    local config = {
       capabilities = server_capabilities,
       on_attach = on_attach,
       settings = settings,
-    })
+    }
+    if custom_configs[server_name] ~= nil then
+      config = custom_configs[server_name](config)
+    end
+    require('lspconfig')[server_name].setup(config)
   end,
 }
 
