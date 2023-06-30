@@ -1,9 +1,6 @@
 local _M = {}
 
-local function format_using_pretter(bufnr)
-  local filename = vim.api.nvim_buf_get_name(bufnr)
-
-  local cmd = {"prettier", filename}
+local function manual_format(bufnr, cmd)
   local stdout = {}
   local job_id = vim.fn.jobstart(cmd, {
     clear_env = false,
@@ -31,6 +28,18 @@ local function format_using_pretter(bufnr)
   end
 end
 
+local function format_using_prettier(bufnr)
+  local filename = vim.api.nvim_buf_get_name(bufnr)
+  local cmd = {"prettier", filename}
+  manual_format(bufnr, cmd)
+end
+
+local function format_using_sql_formatter(bufnr)
+  local filename = vim.api.nvim_buf_get_name(bufnr)
+  local cmd = {"sql-formatter", filename}
+  manual_format(bufnr, cmd)
+end
+
 local function is_prettier_buffer(bufnr)
   local clients = vim.lsp.get_active_clients({ bufnr = bufnr })
   for _, c in ipairs(clients) do
@@ -43,9 +52,21 @@ local function is_prettier_buffer(bufnr)
   return false
 end
 
+local function is_sql_buffer(bufnr)
+  local clients = vim.lsp.get_active_clients({ bufnr = bufnr })
+  for _, c in ipairs(clients) do
+    if c.name == "sqlls" then
+      return true
+    end
+  end
+  return false
+end
+
 _M.pz_format = function(bufnr)
   if is_prettier_buffer(bufnr) then
-    format_using_pretter(bufnr)
+    format_using_prettier(bufnr)
+  elseif is_sql_buffer(bufnr) then
+    format_using_sql_formatter(bufnr)
   else
     vim.lsp.buf.format({
       bufnr = bufnr,
@@ -55,4 +76,3 @@ _M.pz_format = function(bufnr)
 end
 
 return _M;
-
