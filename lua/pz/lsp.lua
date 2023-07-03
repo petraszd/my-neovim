@@ -1,6 +1,6 @@
 --  This function gets run when an LSP connects to a particular buffer.
 
-local on_attach = function(client, bufnr)
+local on_attach = function(_ --[[ client ]], bufnr)
   local nmap = function(keys, func, desc)
     if desc then
       desc = 'LSP: ' .. desc
@@ -44,6 +44,8 @@ local servers = {
     },
   },
 }
+
+require('neodev').setup({})
 
 -- On different computer OSes you may have different configs
 local has_custom_configs, custom_configs = pcall(require, 'pz/custom_lsp_configs')
