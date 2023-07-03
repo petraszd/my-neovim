@@ -28,6 +28,9 @@ local on_attach = function(_ --[[ client ]], bufnr)
   nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
 end
 
+-- Should be called before any LSP config
+require('neodev').setup({})
+
 local servers = {
   clangd = {},
   eslint = {},
@@ -45,19 +48,37 @@ local servers = {
   },
 }
 
-require('neodev').setup({})
-
--- On different computer OSes you may have different configs
-local has_custom_configs, custom_configs = pcall(require, 'pz/custom_lsp_configs')
-if not has_custom_configs then
-  custom_configs = {}
-end
-
 -- nvim-cmp supports additional completion capabilities, so broadcast that to servers
 local lsp_capabilities = vim.lsp.protocol.make_client_capabilities()
-local capabilities = require('cmp_nvim_lsp').default_capabilities(lsp_capabilities)
-local cssls_capabilities = require('cmp_nvim_lsp').default_capabilities(lsp_capabilities)
-cssls_capabilities.textDocument.completion.completionItem.snippetSupport = true
+local default_capabilities = require('cmp_nvim_lsp').default_capabilities(lsp_capabilities)
+
+local config_overrides = {
+  sqlls = function(config)
+    config.root_dir = function(fname)
+      local util = require('lspconfig.util')
+      return util.find_git_ancestor(fname) or util.path.dirname(fname)
+    end
+    config.on_init = function(client)
+      client.handlers["textDocument/publishDiagnostics"] = function()
+        --[[ Empty ]]
+      end
+    end
+    return config
+  end,
+
+  cssls = function(config)
+    local capabilities = require('cmp_nvim_lsp').default_capabilities(lsp_capabilities)
+    capabilities.textDocument.completion.completionItem.snippetSupport = true
+    config.capabilities = capabilities
+    return config
+  end
+}
+
+-- Untracked custom local configs (Example: OS specific config; Work VS personal; etc.)
+local has_custom_configs, local_config_overrides = pcall(require, 'pz/custom_lsp_configs')
+if not has_custom_configs then
+  local_config_overrides = {}
+end
 
 -- Ensure the servers above are installed
 local mason_lspconfig = require('mason-lspconfig')
@@ -69,18 +90,16 @@ mason_lspconfig.setup {
 mason_lspconfig.setup_handlers {
   function(server_name)
     local settings = servers[server_name]
-
-    local server_capabilities = capabilities
-    if server_name == "cssls" then
-      server_capabilities = cssls_capabilities
-    end
     local config = {
-      capabilities = server_capabilities,
+      capabilities = default_capabilities,
       on_attach = on_attach,
       settings = settings,
     }
-    if custom_configs[server_name] ~= nil then
-      config = custom_configs[server_name](config)
+    if config_overrides[server_name] ~= nil then
+      config = config_overrides[server_name](config)
+    end
+    if local_config_overrides[server_name] ~= nil then
+      config = local_config_overrides[server_name](config)
     end
     require('lspconfig')[server_name].setup(config)
   end,
