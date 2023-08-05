@@ -1,6 +1,6 @@
 --  This function gets run when an LSP connects to a particular buffer.
 
-local on_attach = function(_ --[[ client ]], bufnr)
+local on_attach = function(_--[[ client ]], bufnr)
   local nmap = function(keys, func, desc)
     if desc then
       desc = 'LSP: ' .. desc
@@ -43,10 +43,15 @@ local servers = {
     Lua = {
       workspace = { checkThirdParty = false },
       telemetry = { enable = false },
-      diagnostics = { globals = { 'vim' } },
+      -- diagnostics = { globals = { 'vim' } },
+      completion = {
+        callSnippet = "Replace"
+      }
     },
   },
 }
+
+require('neodev').setup({})
 
 -- nvim-cmp supports additional completion capabilities, so broadcast that to servers
 local lsp_capabilities = vim.lsp.protocol.make_client_capabilities()

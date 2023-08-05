@@ -5,7 +5,7 @@ if not vim.loop.fs_stat(lazypath) then
     'git',
     'clone',
     '--filter=blob:none',
-    'https://github.com/folke/lazy.nvim.git',
+    'git@github.com:folke/lazy.nvim.git',
     '--branch=stable', -- latest stable release
     lazypath,
   }
@@ -49,7 +49,8 @@ require('lazy').setup({
 
   {
     -- Useful plugin to show you pending keybinds.
-    'folke/which-key.nvim', opts = {}
+    'folke/which-key.nvim',
+    opts = {}
   },
 
   {
@@ -82,14 +83,15 @@ require('lazy').setup({
 
   {
     -- "gc" to comment visual regions/lines
-    'numToStr/Comment.nvim', opts = {}
+    'numToStr/Comment.nvim',
+    opts = {}
   },
 
   {
     -- Fuzzy Finder (files, lsp, etc)
     'nvim-telescope/telescope.nvim',
     version = '*',
-    dependencies = { 'nvim-lua/plenary.nvim' }
+    dependencies = { 'nvim-lua/plenary.nvim', },
   },
 
   -- Fuzzy Finder Algorithm which requires local dependencies to be built.
@@ -135,6 +137,7 @@ require('lazy').setup({
       vim.cmd.colorscheme('tokyonight-moon')
     end,
   },
+
 }, {
   git = {
     url_format = 'git@github.com:%s.git',
@@ -160,7 +163,15 @@ pcall(require('telescope').load_extension, 'fzf')
 -- [[ Treesitter ]]
 require('nvim-treesitter.configs').setup({
   -- Add languages to be installed here that you want installed for treesitter
-  ensure_installed = { 'c', 'lua', 'python', 'tsx', 'typescript', 'query' },
+  ensure_installed = {
+    'c',
+    'lua',
+    'python',
+    'tsx',
+    'typescript',
+    'javascript',
+    'query',
+  },
 
   -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
   auto_install = false,
@@ -174,4 +185,3 @@ require('nvim-treesitter.configs').setup({
     additional_vim_regex_highlighting = false,
   },
 })
-
