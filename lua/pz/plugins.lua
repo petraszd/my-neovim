@@ -137,7 +137,6 @@ require('lazy').setup({
       vim.cmd.colorscheme('tokyonight-moon')
     end,
   },
-
 }, {
   git = {
     url_format = 'git@github.com:%s.git',
@@ -171,6 +170,7 @@ require('nvim-treesitter.configs').setup({
     'typescript',
     'javascript',
     'query',
+    'gdscript',
   },
 
   -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)

@@ -1,6 +1,6 @@
 --  This function gets run when an LSP connects to a particular buffer.
 
-local on_attach = function(_--[[ client ]], bufnr)
+local on_attach = function(_ --[[ client ]], bufnr)
   local nmap = function(keys, func, desc)
     if desc then
       desc = 'LSP: ' .. desc
@@ -39,6 +39,8 @@ local servers = {
   pylsp = {}, -- TODO: find a better Python LSP
   cssls = {},
   sqlls = {},
+  gdscript = {},
+  omnisharp = {},
   lua_ls = {
     Lua = {
       workspace = { checkThirdParty = false },
@@ -76,7 +78,15 @@ local config_overrides = {
     capabilities.textDocument.completion.completionItem.snippetSupport = true
     config.capabilities = capabilities
     return config
-  end
+  end,
+
+  omnisharp = function(config)
+    local brew_prefix = string.gsub(vim.fn.system('brew --prefix'), '\n', '')
+    local omnisharp_exe = brew_prefix .. '/bin/omnisharp/OmniSharp.exe'
+    print(omnisharp_exe)
+    config.cmd = { 'mono', omnisharp_exe }
+    return config
+  end,
 }
 
 -- Untracked custom local configs (Example: OS specific config; Work VS personal; etc.)
@@ -88,27 +98,32 @@ end
 -- Ensure the servers above are installed
 local mason_lspconfig = require('mason-lspconfig')
 
-mason_lspconfig.setup {
-  ensure_installed = vim.tbl_keys(servers),
-}
+mason_lspconfig.setup({
+  ensure_installed = vim.tbl_filter(function(x)
+    return x ~= "gdscript" -- Mason registry does not have info about gdscript
+  end, vim.tbl_keys(servers)),
+})
 
-mason_lspconfig.setup_handlers {
-  function(server_name)
-    local settings = servers[server_name]
-    local config = {
-      capabilities = default_capabilities,
-      on_attach = on_attach,
-      settings = settings,
-    }
-    if config_overrides[server_name] ~= nil then
-      config = config_overrides[server_name](config)
-    end
-    if local_config_overrides[server_name] ~= nil then
-      config = local_config_overrides[server_name](config)
-    end
-    require('lspconfig')[server_name].setup(config)
-  end,
-}
+local function setup_lsp_server(server_name)
+  local settings = servers[server_name]
+  local config = {
+    capabilities = default_capabilities,
+    on_attach = on_attach,
+    settings = settings,
+  }
+  if config_overrides[server_name] ~= nil then
+    config = config_overrides[server_name](config)
+  end
+  if local_config_overrides[server_name] ~= nil then
+    config = local_config_overrides[server_name](config)
+  end
+  require("lspconfig")[server_name].setup(config)
+end
+
+-- Setup gdscript manually
+setup_lsp_server("gdscript")
+
+mason_lspconfig.setup_handlers({ setup_lsp_server })
 
 -- nvim-cmp setup
 local cmp = require('cmp')
@@ -116,7 +131,7 @@ local luasnip = require('luasnip')
 
 luasnip.config.setup({})
 
-cmp.setup {
+cmp.setup({
   snippet = {
     expand = function(args)
       luasnip.lsp_expand(args.body)
@@ -156,4 +171,4 @@ cmp.setup {
     { name = 'luasnip' },
     { name = 'buffer' },
   },
-}
+})
