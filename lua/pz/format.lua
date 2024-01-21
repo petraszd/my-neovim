@@ -62,7 +62,28 @@ local function is_sql_buffer(bufnr)
   return false
 end
 
+--- @param bufnr number
+--- @return any[]
+local function get_treesitter_path(bufnr)
+  --- @type any[]
+  local result = {}
+
+  local node = vim.treesitter.get_node({ bufnr = bufnr })
+  if node == nil then
+    return result
+  end
+
+  while node ~= nil do
+    table.insert(result, node:id())
+    node = node:parent()
+  end
+
+  return result
+end
+
 _M.pz_format = function(bufnr)
+  -- local ts_path = get_treesitter_path(bufnr)
+
   if is_prettier_buffer(bufnr) then
     format_using_prettier(bufnr)
   elseif is_sql_buffer(bufnr) then
@@ -73,6 +94,18 @@ _M.pz_format = function(bufnr)
       timeout_ms = 10000,
     })
   end
+
+  local root = vim.treesitter.get_node({ bufnr = bufnr })
+  if root == nil then
+    return
+  end
+
+  while root:parent() ~= nil do
+    root = root:parent()
+  end
+
+  -- vim.print(ts_path[#ts_path] == root:id())
+  -- TODO: continue here
 end
 
 return _M;
