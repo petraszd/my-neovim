@@ -26,6 +26,7 @@ vim.keymap.set("n", "<F3>", function()
   print("Reloading pz_format")
   package.loaded["pz/format"] = nil
   require("pz/format")
+  vim.cmd("messages clear")
 end, {})
 
 -- Special filetype cases for 2 space indent
