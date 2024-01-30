@@ -20,15 +20,6 @@ vim.opt.timeoutlen = 300
 vim.opt.termguicolors = true
 vim.opt.relativenumber = true
 
-
--- TODO: remove
-vim.keymap.set("n", "<F3>", function()
-  print("Reloading pz_format")
-  package.loaded["pz/format"] = nil
-  require("pz/format")
-  vim.cmd("messages clear")
-end, {})
-
 -- Special filetype cases for 2 space indent
 vim.api.nvim_create_autocmd({ "FileType" }, {
   pattern = {
