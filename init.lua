@@ -283,6 +283,7 @@ end, { desc = "[/] Fuzzily search in current buffer" })
 vim.keymap.set("n", "<leader>p", telescope_builtin.find_files, { desc = "[P] Search Files" })
 vim.keymap.set("n", "<leader>f", telescope_builtin.live_grep, { desc = "[F] Search by Grep" })
 vim.keymap.set("n", "<leader>m", telescope_builtin.marks, { desc = "[M] Search by Marks" })
+vim.keymap.set("n", "<leader>dd", telescope_builtin.diagnostics, { desc = "[DD] Search by diagnostics" })
 
 vim.keymap.set("n", "<leader>d", vim.diagnostic.goto_next, { desc = "[D] Go to next diagnostic message" })
 
