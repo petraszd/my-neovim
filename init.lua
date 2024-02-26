@@ -425,9 +425,9 @@ vim.keymap.set({"i", "s"}, "<C-J>", function()
   end
 end, {silent = true})
 vim.keymap.set({"i", "s"}, "<C-E>", function()
-	if luasnip.choice_active() then
-		luasnip.change_choice(1)
-	end
+  if luasnip.choice_active() then
+    luasnip.change_choice(1)
+  end
 end, {silent = true})
 
 -- nvim-cmp setup
