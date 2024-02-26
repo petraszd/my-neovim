@@ -409,11 +409,29 @@ setup_lsp_server("gdscript")
 
 mason_lspconfig.setup_handlers({ setup_lsp_server })
 
--- nvim-cmp setup
-local cmp = require("cmp")
+
+-- luasnip
 local luasnip = require("luasnip")
 
 luasnip.config.setup({})
+vim.keymap.set({"i", "s"}, "<C-L>", function()
+  if luasnip.jumpable() then
+    luasnip.jump( 1)
+  end
+end, {silent = true})
+vim.keymap.set({"i", "s"}, "<C-J>", function()
+  if luasnip.jumpable() then
+    luasnip.jump(-1)
+  end
+end, {silent = true})
+vim.keymap.set({"i", "s"}, "<C-E>", function()
+	if luasnip.choice_active() then
+		luasnip.change_choice(1)
+	end
+end, {silent = true})
+
+-- nvim-cmp setup
+local cmp = require("cmp")
 
 cmp.setup({
   snippet = {
@@ -434,8 +452,8 @@ cmp.setup({
     ["<Tab>"] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_next_item()
-      elseif luasnip.expand_or_jumpable() then
-        luasnip.expand_or_jump()
+      elseif luasnip.expandable() then
+        luasnip.expand()
       else
         fallback()
       end
@@ -443,8 +461,6 @@ cmp.setup({
     ["<S-Tab>"] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_prev_item()
-      elseif luasnip.jumpable(-1) then
-        luasnip.jump(-1)
       else
         fallback()
       end
