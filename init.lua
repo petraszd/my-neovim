@@ -20,6 +20,14 @@ vim.opt.timeoutlen = 300
 vim.opt.termguicolors = true
 vim.opt.relativenumber = true
 
+
+vim.keymap.set("n", "<F2>", function ()
+  package.loaded["pz/colors"] = nil
+  vim.cmd.messages("clear")
+  require("pz/colors").display_colors()
+end, { desc = "Reload And Display Colors" })
+
+
 -- Special filetype cases for 2 space indent
 vim.api.nvim_create_autocmd({ "FileType" }, {
   pattern = {
