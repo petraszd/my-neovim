@@ -1,5 +1,6 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
+vim.g.netrw_bufsettings = "noma nomod number nowrap ro nobl"
 
 vim.opt.textwidth = 119
 vim.opt.number = true
@@ -19,7 +20,6 @@ vim.opt.timeout = true
 vim.opt.timeoutlen = 300
 vim.opt.termguicolors = true
 vim.opt.relativenumber = true
-
 
 vim.keymap.set("n", "<F2>", function ()
   package.loaded["pz/colors"] = nil
