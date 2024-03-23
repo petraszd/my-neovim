@@ -349,6 +349,7 @@ local servers = {
   omnisharp = {},
   lua_ls = {
     Lua = {
+      semantic = { enable = false },
       workspace = { checkThirdParty = false },
       telemetry = { enable = false },
       -- diagnostics = { globals = { "vim" } },
