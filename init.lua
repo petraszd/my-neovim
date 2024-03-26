@@ -40,6 +40,7 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
     "less",
     "html",
     "htmldjango",
+    "xml",
   },
   callback = function()
     vim.opt.tabstop = 2
