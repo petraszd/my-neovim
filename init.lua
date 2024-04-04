@@ -255,6 +255,7 @@ require("nvim-treesitter.configs").setup({
     "query",
     "gdscript",
     "vimdoc",
+    "rust",
   },
 
   auto_install = false,
@@ -348,6 +349,7 @@ local servers = {
   sqlls = {},
   gdscript = {},
   omnisharp = {},
+  rust_analyzer = {},
   lua_ls = {
     Lua = {
       semantic = { enable = false },
@@ -405,7 +407,8 @@ local mason_lspconfig = require("mason-lspconfig")
 
 mason_lspconfig.setup({
   ensure_installed = vim.tbl_filter(function(x)
-    return x ~= "gdscript" -- Mason registry does not have info about gdscript
+    -- Mason registry does not have info about gdscript
+    return x ~= "gdscript"
   end, vim.tbl_keys(servers)),
 })
 
