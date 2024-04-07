@@ -180,6 +180,7 @@ function _M.display_colors()
   end
 
   local picker = tele_pickers.new(opts, {
+    prompt_title = "Find Colors",
     preview_title = "Preview",
     finder = tele_finders.new_table {
       results = colors,
