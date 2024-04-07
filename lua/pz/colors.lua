@@ -119,9 +119,10 @@ local function _get_bruteforce_colors(bufnr)
 
   local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, true)
   local ints_pattern = "()(%d+)%s*,%s*(%d+)%s*,%s*(%d+)"
+  local hex3_pattern = "()(#%x%x%x)[%X$]"
+  local hex6_pattern = "()(#%x%x%x%x%x%x)[%X$]"
 
   for lnum, line in ipairs(lines) do
-    vim.print({ "LINE", line })
     for pos, c1, c2, c3 in string.gmatch(line, ints_pattern) do
       local r = tonumber(c1)
       local g = tonumber(c2)
@@ -131,6 +132,16 @@ local function _get_bruteforce_colors(bufnr)
         local col = tonumber(pos) or 0
         table.insert(result, Color:new(bufnr, hex, lnum, col))
       end
+    end
+
+    for pos, hex in string.gmatch(line, hex3_pattern) do
+      local col = tonumber(pos) or 0
+      table.insert(result, Color:new(bufnr, normalize_hex_color(hex), lnum, col))
+    end
+
+    for pos, hex in string.gmatch(line, hex6_pattern) do
+      local col = tonumber(pos) or 0
+      table.insert(result, Color:new(bufnr, normalize_hex_color(hex), lnum, col))
     end
   end
 
