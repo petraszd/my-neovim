@@ -1,10 +1,10 @@
 local _M = {}
 
 -- TODO: rename
-local pickers = require("telescope.pickers")
-local conf = require("telescope.config").values
-local finders = require("telescope.finders")
-local make_entry = require("telescope.make_entry")
+local tele_pickers = require("telescope.pickers")
+local tele_conf = require("telescope.config").values
+local tele_finders = require("telescope.finders")
+local tele_make_entry = require("telescope.make_entry")
 
 local pz_colors_ns = vim.api.nvim_create_namespace("PZ_Colors_NS")
 
@@ -179,15 +179,13 @@ function _M.display_colors()
     end
   end
 
-  local picker = pickers.new(opts, {
-    prompt_title = "TODO: TreeSitter Colors",
-    results_title = "TODO: RESULT TITLE",
-    preview_title = "TODO: PREVIEW TITLE",
-    finder = finders.new_table {
+  local picker = tele_pickers.new(opts, {
+    preview_title = "Preview",
+    finder = tele_finders.new_table {
       results = colors,
       --- @param color Color
       entry_maker = function(color)
-        return make_entry.set_default_entry_mt({
+        return tele_make_entry.set_default_entry_mt({
           value = color.line,
           ordinal = color.line,
           display = function(entry)
@@ -201,19 +199,23 @@ function _M.display_colors()
         }, opts)
       end
     },
-    previewer = conf.grep_previewer(opts),
-    -- TODO: would be nice to sort by color similarity
-    sorter = conf.generic_sorter(opts),
+    previewer = tele_conf.grep_previewer(opts),
+    sorter = tele_conf.generic_sorter(opts),
     push_cursor_on_edit = true,
     push_tagstack_on_edit = true,
   })
   picker:find()
 
   if picker.results_win ~= nil then
-    vim.api.nvim_win_set_hl_ns(picker.results_win, pz_colors_ns)
-    -- TODO:
-    -- TODO: on close clear HL
-    -- vim.api.nvim_buf_attach
+    local results_win = picker.results_win
+    local results_bufnr = picker.results_bufnr
+
+    vim.api.nvim_win_set_hl_ns(results_win, pz_colors_ns)
+    vim.api.nvim_buf_attach(results_bufnr, false, {
+      on_detach = function()
+        vim.api.nvim_buf_clear_namespace(results_bufnr, pz_colors_ns, 0, -1)
+      end,
+    })
   end
 end
 
