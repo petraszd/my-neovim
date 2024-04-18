@@ -21,13 +21,7 @@ vim.opt.timeoutlen = 300
 vim.opt.termguicolors = true
 vim.opt.relativenumber = true
 vim.opt.showmode = false
-
-vim.keymap.set("n", "<F2>", function ()
-  package.loaded["pz/colors"] = nil
-  vim.cmd.messages("clear")
-  require("pz/colors").display_colors()
-end, { desc = "Reload And Display Colors" })
-
+vim.opt.scrolloff = 10
 
 -- Special filetype cases for 2 space indent
 vim.api.nvim_create_autocmd({ "FileType" }, {
@@ -85,6 +79,21 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 -- Plugins themselves
+
+local file_colors_plugin_item = {
+  dir = "~/Devel/lua/telescope-file-colors.nvim",
+  dependencies = { "nvim-telescope/telescope.nvim", },
+  config = function()
+    require("telescope").load_extension("file_colors")
+  end,
+}
+local file_colors_path = vim.fn.environ()["HOME"] .. "/Devel/lua/telescope-file-colors.nvim"
+if vim.fn.isdirectory(file_colors_path) == 1 then
+  file_colors_plugin_item["dir"] = "~/Devel/lua/telescope-file-colors.nvim"
+else
+  file_colors_plugin_item[1] = "petraszd/telescope-file-colors.nvim"
+end
+
 require("lazy").setup({
   {
     -- LSP Configuration & Plugins
@@ -218,6 +227,8 @@ require("lazy").setup({
       vim.cmd.colorscheme("tokyonight-moon")
     end,
   },
+
+  file_colors_plugin_item,
 }, {
   git = {
     url_format = "git@github.com:%s.git",
@@ -438,21 +449,21 @@ mason_lspconfig.setup_handlers({ setup_lsp_server })
 local luasnip = require("luasnip")
 
 luasnip.config.setup({})
-vim.keymap.set({"i", "s"}, "<C-L>", function()
+vim.keymap.set({ "i", "s" }, "<C-L>", function()
   if luasnip.jumpable() then
-    luasnip.jump( 1)
+    luasnip.jump(1)
   end
-end, {silent = true})
-vim.keymap.set({"i", "s"}, "<C-J>", function()
+end, { silent = true })
+vim.keymap.set({ "i", "s" }, "<C-J>", function()
   if luasnip.jumpable() then
     luasnip.jump(-1)
   end
-end, {silent = true})
-vim.keymap.set({"i", "s"}, "<C-E>", function()
+end, { silent = true })
+vim.keymap.set({ "i", "s" }, "<C-E>", function()
   if luasnip.choice_active() then
     luasnip.change_choice(1)
   end
-end, {silent = true})
+end, { silent = true })
 
 -- nvim-cmp setup
 local cmp = require("cmp")
