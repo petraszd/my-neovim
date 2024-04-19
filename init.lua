@@ -81,7 +81,6 @@ vim.opt.rtp:prepend(lazypath)
 -- Plugins themselves
 
 local file_colors_plugin_item = {
-  dir = "~/Devel/lua/telescope-file-colors.nvim",
   dependencies = { "nvim-telescope/telescope.nvim", },
   config = function()
     require("telescope").load_extension("file_colors")
