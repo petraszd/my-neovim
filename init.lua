@@ -42,7 +42,6 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
   end,
 })
 
-
 -- Highlight when yanking (copying) text
 vim.api.nvim_create_autocmd('TextYankPost', {
   desc = 'Highlight when yanking (copying) text',
@@ -62,9 +61,16 @@ vim.opt.clipboard:append({ "unnamedplus" })
 vim.opt.completeopt = { "menu", "menuone", "noselect" }
 
 
-----------------------
--- PLUGINS (lazy.nvim)
-----------------------
+----------
+-- PLUGINS
+----------
+
+-- Built-in
+
+vim.cmd([[packadd cfilter]])
+
+-- Lazy Plugins
+
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system {
@@ -77,8 +83,6 @@ if not vim.loop.fs_stat(lazypath) then
   }
 end
 vim.opt.rtp:prepend(lazypath)
-
--- Plugins themselves
 
 local file_colors_plugin_item = {
   dependencies = { "nvim-telescope/telescope.nvim", },
@@ -292,6 +296,9 @@ end, { desc = "[T]oggle [H]ighlight" })
 
 vim.keymap.set("i", "kk", "<C-p>")
 vim.keymap.set("i", "jj", "<C-n>")
+
+vim.keymap.set("n", "<leader>;", ":cn<CR>", { desc = "Next Buffer in Quickfix" })
+vim.keymap.set("n", "<leader>,", ":cp<CR>", { desc = "Prev Buffer in Quickfix" })
 
 local telescope_builtin = require("telescope.builtin")
 local telescope_themes = require("telescope.themes")
