@@ -86,9 +86,6 @@ vim.opt.rtp:prepend(lazypath)
 
 local file_colors_plugin_item = {
   dependencies = { "nvim-telescope/telescope.nvim", },
-  config = function()
-    require("telescope").load_extension("file_colors")
-  end,
 }
 local file_colors_path = vim.fn.environ()["HOME"] .. "/Devel/lua/telescope-file-colors.nvim"
 if vim.fn.isdirectory(file_colors_path) == 1 then
@@ -251,8 +248,14 @@ require("telescope").setup {
       },
     },
   },
+  extensions = {
+    -- file_colors = {
+    --   use_treesitter = true,
+    -- }
+  },
 }
-pcall(require("telescope").load_extension, "fzf")
+require("telescope").load_extension("fzf")
+require("telescope").load_extension("file_colors")
 
 -------------
 -- Treesitter
