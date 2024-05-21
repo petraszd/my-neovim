@@ -369,7 +369,13 @@ local servers = {
   sqlls = {},
   gdscript = {},
   omnisharp = {},
-  rust_analyzer = {},
+  rust_analyzer = {
+    ["rust-analyzer"] = {
+      cargo = {
+        features = "all",
+      },
+    },
+  },
   lua_ls = {
     Lua = {
       semantic = { enable = false },
