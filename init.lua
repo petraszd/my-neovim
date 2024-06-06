@@ -219,8 +219,18 @@ require("lazy").setup({
             bg = util.blend(colors["fg"], colors["bg"], 0.2),
             underline = true,
           }
+          local current_fg = highlights["LineNr"].fg
           highlights["LineNr"] = {
-            fg = util.lighten(highlights["LineNr"].fg, 0.9)
+            fg = util.lighten(current_fg, 0.7),
+          }
+          highlights["CursorLineNr"] = {
+            fg = util.lighten(current_fg, 0.7),
+          }
+          highlights["LineNrAbove"] = {
+            fg = util.lighten(current_fg, 0.9),
+          }
+          highlights["LineNrBelow"] = {
+            fg = util.lighten(current_fg, 0.9),
           }
         end,
       })
@@ -285,6 +295,11 @@ require("nvim-treesitter.configs").setup({
   sync_install = false,
   ignore_install = {},
 })
+
+
+-----------------
+-- Random keymaps
+-----------------
 vim.keymap.set("n", "<leader>w", "<C-w>w", { desc = "Next [W]indow" })
 vim.keymap.set("n", "<leader>v", "<C-w>v", { desc = "Split [V]ertical" })
 vim.keymap.set("n", "<leader>c", "<C-w>c", { desc = "[C]lose window" })
@@ -327,6 +342,9 @@ vim.keymap.set("n", "<leader>m", telescope_builtin.marks, { desc = "[M] Search b
 vim.keymap.set("n", "<leader>dd", telescope_builtin.diagnostics, { desc = "[DD] Search by diagnostics" })
 
 vim.keymap.set("n", "<leader>d", vim.diagnostic.goto_next, { desc = "[D] Go to next diagnostic message" })
+vim.keymap.set("n", "<leader>u", function()
+  telescope_builtin.live_grep({ default_text = vim.fn.expand("<cword>") })
+end, { desc = "Search By Grep a word [U]nder cursor" })
 
 -- On LSP connects to a particular buffer.
 local on_attach = function(_ --[[ client ]], bufnr)
@@ -338,7 +356,10 @@ local on_attach = function(_ --[[ client ]], bufnr)
     vim.keymap.set("n", keys, func, { buffer = bufnr, desc = desc })
   end
 
+  -- TODO: stupid: remove it in favor of `K`
   nmap("<leader>h", require("pz/hover").pz_hover, "[H]over")
+  vim.keymap.set("i", "<C-k>", vim.lsp.buf.signature_help, { desc = "Signature help" })
+
   nmap("<leader>r", function()
     require("pz/format").pz_format(bufnr)
   end, "Fo[r]mat")
