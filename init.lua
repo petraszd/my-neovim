@@ -258,6 +258,15 @@ require("telescope").setup {
       },
     },
   },
+  pickers = {
+    buffers = {
+      mappings = {
+        i = {
+          ["<C-d>"] = require("telescope.actions").delete_buffer,
+        }
+      }
+    }
+  },
   extensions = {
     -- file_colors = {
     --   use_treesitter = true,
