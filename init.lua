@@ -22,6 +22,7 @@ vim.opt.termguicolors = true
 vim.opt.relativenumber = true
 vim.opt.showmode = false
 vim.opt.scrolloff = 10
+vim.opt.laststatus = 3
 
 -- Special filetype cases for 2 space indent
 vim.api.nvim_create_autocmd({ "FileType" }, {
@@ -216,21 +217,26 @@ require("lazy").setup({
         on_highlights = function(highlights, colors)
           local util = require("tokyonight.util")
           highlights["DiagnosticUnnecessary"] = {
-            bg = util.blend(colors["fg"], colors["bg"], 0.2),
+            bg = util.blend(colors["fg"], 0.2, colors["bg"]),
             underline = true,
           }
-          local current_fg = highlights["LineNr"].fg
+          local current_line_fg = highlights["LineNr"].fg
           highlights["LineNr"] = {
-            fg = util.lighten(current_fg, 0.7),
+            fg = util.lighten(current_line_fg, 0.7),
           }
           highlights["CursorLineNr"] = {
-            fg = util.lighten(current_fg, 0.7),
+            fg = util.lighten(current_line_fg, 0.7),
           }
           highlights["LineNrAbove"] = {
-            fg = util.lighten(current_fg, 0.9),
+            fg = util.lighten(current_line_fg, 0.9),
           }
           highlights["LineNrBelow"] = {
-            fg = util.lighten(current_fg, 0.9),
+            fg = util.lighten(current_line_fg, 0.9),
+          }
+          local current_separator_fg = highlights["WinSeparator"].fg
+          highlights["WinSeparator"] = {
+            bold = true,
+            fg = util.lighten(current_separator_fg, 0.6),
           }
         end,
       })
