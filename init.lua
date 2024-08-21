@@ -260,7 +260,6 @@ require("telescope").setup {
       i = {
         ["<C-u>"] = false,
         ["<C-d>"] = false,
-        ["<esc>"] = require("telescope.actions").close,
       },
     },
   },
