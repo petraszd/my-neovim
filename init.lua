@@ -120,6 +120,7 @@ require("lazy").setup({
     config = function()
       local snippets_path = vim.fn.stdpath("config") .. "/snippets"
       require("luasnip.loaders.from_lua").load({ paths = { snippets_path } })
+      require("luasnip.loaders.from_vscode").lazy_load()
     end,
   },
 
@@ -397,7 +398,7 @@ require("neodev").setup({})
 local servers = {
   clangd = {},
   eslint = {},
-  tsserver = {},
+  ts_ls = {},
   zls = {},
   pylsp = {}, -- TODO: find a better Python LSP
   cssls = {},
