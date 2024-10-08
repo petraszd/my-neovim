@@ -43,7 +43,7 @@ local function format_using_sql_formatter(bufnr)
 end
 
 local function is_prettier_buffer(bufnr)
-  local clients = vim.lsp.get_active_clients({ bufnr = bufnr })
+  local clients = vim.lsp.get_clients({ bufnr = bufnr })
   for _, c in ipairs(clients) do
     -- Not sure if checking just for tsserver and eslint is good enough
     if c.name == "tsserver" or c.name == "eslint" then
@@ -55,7 +55,7 @@ local function is_prettier_buffer(bufnr)
 end
 
 local function is_sql_buffer(bufnr)
-  local clients = vim.lsp.get_active_clients({ bufnr = bufnr })
+  local clients = vim.lsp.get_clients({ bufnr = bufnr })
   for _, c in ipairs(clients) do
     if c.name == "sqlls" then
       return true
