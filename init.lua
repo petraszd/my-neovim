@@ -400,7 +400,8 @@ local servers = {
   eslint = {},
   ts_ls = {},
   zls = {},
-  pylsp = {}, -- TODO: find a better Python LSP
+  jedi_language_server = {},
+  ruff = {},
   cssls = {},
   sqlls = {},
   gdscript = {},
@@ -409,6 +410,7 @@ local servers = {
     ["rust-analyzer"] = {
       cargo = {
         features = "all",
+        -- extraArgs = { "+nightly", },
       },
     },
   },
