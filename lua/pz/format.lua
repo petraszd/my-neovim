@@ -64,6 +64,16 @@ local function is_sql_buffer(bufnr)
   return false
 end
 
+local function is_python_ruff_buffer(bufnr)
+  local clients = vim.lsp.get_clients({ bufnr = bufnr })
+  for _, c in ipairs(clients) do
+    if c.name == "ruff" then
+      return true
+    end
+  end
+  return false
+end
+
 local function save_if_unsaved(bufnr)
   if vim.fn.getbufinfo(bufnr)[1].changed == 1 then
     vim.cmd.write({ bang = true })
@@ -78,6 +88,15 @@ _M.pz_format = function(bufnr)
   elseif is_sql_buffer(bufnr) then
     format_using_sql_formatter(bufnr)
   else
+    if is_python_ruff_buffer(bufnr) then
+      vim.lsp.buf.code_action({
+        context = {
+          diagnostics = {},
+          only = { "source.organizeImports" },
+        },
+        apply = true,
+      })
+    end
     vim.lsp.buf.format({
       bufnr = bufnr,
       timeout_ms = FMT_TIMEOUT,
