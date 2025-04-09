@@ -400,10 +400,18 @@ local servers = {
   eslint = {},
   ts_ls = {},
   zls = {},
-  jedi_language_server = {},
+  pyright = {
+    python = {
+      disableOrganizeImports = true,
+      analysis = {
+        typeCheckingMode = "off"
+      }
+    }
+  },
   ruff = {},
   cssls = {},
   sqlls = {},
+  gopls = {},
   gdscript = {},
   omnisharp = {},
   rust_analyzer = {
