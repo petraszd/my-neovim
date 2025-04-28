@@ -400,12 +400,19 @@ local servers = {
   eslint = {},
   ts_ls = {},
   zls = {},
-  pyright = {
-    python = {
+  basedpyright = {
+    basedpyright = {
+      typeCheckingMode = "off",
       disableOrganizeImports = true,
+      openFilesOnly = true,
       analysis = {
-        typeCheckingMode = "off"
-      }
+        autoSearchPaths = true,
+        diagnosticMode = "openFilesOnly",
+        useLibraryCodeForTypes = true,
+        diagnosticSeverityOverrides = {
+          reportUnusedParameter = "none",
+        },
+      },
     }
   },
   ruff = {},
