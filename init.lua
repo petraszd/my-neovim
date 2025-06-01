@@ -427,7 +427,7 @@ local servers = {
       semantic = { enable = false },
       workspace = { checkThirdParty = false },
       telemetry = { enable = false },
-      -- diagnostics = { globals = { "vim" } },
+      diagnostics = { globals = { "vim" } },
       completion = {
         callSnippet = "Replace"
       }
@@ -497,13 +497,16 @@ local function setup_lsp_server(server_name)
   if local_config_overrides[server_name] ~= nil then
     config = local_config_overrides[server_name](config)
   end
-  require("lspconfig")[server_name].setup(config)
+  vim.lsp.enable(server_name)
+  vim.lsp.config(server_name, config)
 end
 
 -- Setup gdscript manually
-setup_lsp_server("gdscript")
+for server_name in pairs(servers) do
+  setup_lsp_server(server_name)
+end
 
-mason_lspconfig.setup_handlers({ setup_lsp_server })
+-- mason_lspconfig.setup_handlers({ setup_lsp_server })
 
 
 -- luasnip
