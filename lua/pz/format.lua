@@ -55,13 +55,7 @@ local function is_prettier_buffer(bufnr)
 end
 
 local function is_sql_buffer(bufnr)
-  local clients = vim.lsp.get_clients({ bufnr = bufnr })
-  for _, c in ipairs(clients) do
-    if c.name == "sqlls" then
-      return true
-    end
-  end
-  return false
+  return vim.api.nvim_buf_get_option(bufnr, "filetype") == "sql"
 end
 
 local function is_python_ruff_buffer(bufnr)

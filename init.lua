@@ -36,6 +36,7 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
     "html",
     "htmldjango",
     "xml",
+    "sql",
   },
   callback = function()
     vim.opt.tabstop = 2
@@ -361,6 +362,10 @@ vim.keymap.set("n", "<leader>u", function()
   telescope_builtin.live_grep({ default_text = vim.fn.expand("<cword>") })
 end, { desc = "Search By Grep a word [U]nder cursor" })
 
+vim.keymap.set("n", "<leader>r", function()
+  require("pz/format").pz_format(vim.api.nvim_get_current_buf())
+end, { desc = "Fo[r]mat" })
+
 -- On LSP connects to a particular buffer.
 local on_attach = function(_ --[[ client ]], bufnr)
   local nmap = function(keys, func, desc)
@@ -374,10 +379,6 @@ local on_attach = function(_ --[[ client ]], bufnr)
   -- TODO: stupid: remove it in favor of `K`
   nmap("<leader>h", require("pz/hover").pz_hover, "[H]over")
   vim.keymap.set("i", "<C-k>", vim.lsp.buf.signature_help, { desc = "Signature help" })
-
-  nmap("<leader>r", function()
-    require("pz/format").pz_format(bufnr)
-  end, "Fo[r]mat")
 
   nmap("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
   nmap("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction")
@@ -410,7 +411,6 @@ local servers = {
   },
   ruff = {},
   cssls = {},
-  sqlls = {},
   gopls = {},
   gdscript = {},
   omnisharp = {},
