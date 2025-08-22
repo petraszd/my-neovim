@@ -214,7 +214,7 @@ require("lazy").setup({
     "folke/tokyonight.nvim",
     config = function()
       require("tokyonight").setup({
-        style = "moon",
+        style = "storm",
         on_colors = function() end,
         on_highlights = function(highlights, colors)
           local util = require("tokyonight.util")
@@ -242,7 +242,7 @@ require("lazy").setup({
           }
         end,
       })
-      vim.cmd.colorscheme("tokyonight-moon")
+      vim.cmd.colorscheme("tokyonight-storm")
     end,
   },
 
@@ -433,6 +433,8 @@ local servers = {
       }
     },
   },
+  helm_ls = {},
+  terraformls = {},
 }
 
 -- nvim-cmp supports additional completion capabilities, so broadcast that to servers
