@@ -7,6 +7,7 @@ vim.opt.number = true
 vim.opt.secure = true
 vim.opt.hlsearch = false
 vim.opt.tabstop = 4
+vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
 vim.opt.shiftwidth = 4
 vim.opt.mouse = "a"
@@ -503,12 +504,9 @@ local function setup_lsp_server(server_name)
   vim.lsp.config(server_name, config)
 end
 
--- Setup gdscript manually
 for server_name in pairs(servers) do
   setup_lsp_server(server_name)
 end
-
--- mason_lspconfig.setup_handlers({ setup_lsp_server })
 
 
 -- luasnip
