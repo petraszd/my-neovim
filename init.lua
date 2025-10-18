@@ -87,16 +87,6 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-local file_colors_plugin_item = {
-  dependencies = { "nvim-telescope/telescope.nvim", },
-}
-local file_colors_path = vim.fn.environ()["HOME"] .. "/Devel/lua/telescope-file-colors.nvim"
-if vim.fn.isdirectory(file_colors_path) == 1 then
-  file_colors_plugin_item["dir"] = "~/Devel/lua/telescope-file-colors.nvim"
-else
-  file_colors_plugin_item[1] = "petraszd/telescope-file-colors.nvim"
-end
-
 require("lazy").setup({
   {
     -- LSP Configuration & Plugins
@@ -138,6 +128,14 @@ require("lazy").setup({
   },
 
   {
+    "folke/snacks.nvim",
+    ---@type snacks.Config
+    opts = {
+      picker = {},
+    }
+  },
+
+  {
     -- Useful plugin to show you pending keybinds.
     "folke/which-key.nvim",
     opts = {}
@@ -175,26 +173,6 @@ require("lazy").setup({
     -- "gc" to comment visual regions/lines
     "numToStr/Comment.nvim",
     opts = {}
-  },
-
-  {
-    -- Fuzzy Finder (files, lsp, etc)
-    "nvim-telescope/telescope.nvim",
-    version = "*",
-    dependencies = { "nvim-lua/plenary.nvim", },
-  },
-
-  -- Fuzzy Finder Algorithm which requires local dependencies to be built.
-  -- Only load if `make` is available. Make sure you have the system
-  -- requirements installed.
-  {
-    "nvim-telescope/telescope-fzf-native.nvim",
-    -- NOTE: If you are having trouble with this installation,
-    --       refer to the README for telescope-fzf-native for more instructions.
-    build = "make",
-    cond = function()
-      return vim.fn.executable "make" == 1
-    end,
   },
 
   {
@@ -247,42 +225,12 @@ require("lazy").setup({
     end,
   },
 
-  file_colors_plugin_item,
+  -- file_colors_plugin_item,
 }, {
   git = {
     url_format = "git@github.com:%s.git",
   }
 })
-
--------------------------
--- Telescope Plugin Setup
--------------------------
-require("telescope").setup {
-  defaults = {
-    mappings = {
-      i = {
-        ["<C-u>"] = false,
-        ["<C-d>"] = false,
-      },
-    },
-  },
-  pickers = {
-    buffers = {
-      mappings = {
-        i = {
-          ["<C-d>"] = require("telescope.actions").delete_buffer,
-        }
-      }
-    }
-  },
-  extensions = {
-    -- file_colors = {
-    --   use_treesitter = true,
-    -- }
-  },
-}
-require("telescope").load_extension("fzf")
-require("telescope").load_extension("file_colors")
 
 -------------
 -- Treesitter
@@ -335,34 +283,12 @@ vim.keymap.set("i", "jj", "<C-n>")
 vim.keymap.set("n", "<leader>;", ":cn<CR>", { desc = "Next Buffer in Quickfix" })
 vim.keymap.set("n", "<leader>,", ":cp<CR>", { desc = "Prev Buffer in Quickfix" })
 
-local telescope_builtin = require("telescope.builtin")
-local telescope_themes = require("telescope.themes")
-
-vim.keymap.set("n", "<leader>b", function()
-  telescope_builtin.buffers({
-    sort_lastused = true,
-    sort_mru = true,
-  })
-end, { desc = "Find existing [B]uffers" })
-vim.keymap.set("n", "<leader>/", function()
-  telescope_builtin.current_buffer_fuzzy_find(
-    telescope_themes.get_dropdown({
-      winblend = 10,
-      previewer = false,
-    })
-  )
-end, { desc = "[/] Fuzzily search in current buffer" })
-
-vim.keymap.set("n", "<leader>p", telescope_builtin.find_files, { desc = "[P] Search Files" })
-vim.keymap.set("n", "<leader>f", telescope_builtin.live_grep, { desc = "[F] Search by Grep" })
-vim.keymap.set("n", "<leader>m", telescope_builtin.marks, { desc = "[M] Search by Marks" })
-vim.keymap.set("n", "<leader>dd", telescope_builtin.diagnostics, { desc = "[DD] Search by diagnostics" })
-
-vim.keymap.set("n", "<leader>d", vim.diagnostic.goto_next, { desc = "[D] Go to next diagnostic message" })
-vim.keymap.set("n", "<leader>u", function()
-  telescope_builtin.live_grep({ default_text = vim.fn.expand("<cword>") })
-end, { desc = "Search By Grep a word [U]nder cursor" })
-
+vim.keymap.set("n", "<leader>fb", Snacks.picker.buffers, { desc = "Pick [B]uffer" })
+vim.keymap.set("n", "<leader>ff", Snacks.picker.files, { desc = "Pick [F]ile" })
+vim.keymap.set("n", "<leader>fg", Snacks.picker.grep, { desc = "Grep in the project" })
+vim.keymap.set("n", "<leader>f/", Snacks.picker.lines, { desc = "Grep in the current buffer" })
+vim.keymap.set("n", "<leader>fw", Snacks.picker.grep_word, { desc = "Grep files by current [W]ord" })
+vim.keymap.set("n", "<leader>fd", Snacks.picker.diagnostics_buffer, { desc = "[D]iagnostics in the current buffer" })
 vim.keymap.set("n", "<leader>r", function()
   require("pz/format").pz_format(vim.api.nvim_get_current_buf())
 end, { desc = "Fo[r]mat" })
@@ -385,10 +311,10 @@ local on_attach = function(_ --[[ client ]], bufnr)
   nmap("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction")
 
   nmap("gd", vim.lsp.buf.definition, "[G]oto [D]efinition")
-  nmap("gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
+  nmap("gr", function () Snacks.picker.lsp_references({ include_current = true }) end, "[G]oto [R]eferences")
   nmap("gI", vim.lsp.buf.implementation, "[G]oto [I]mplementation")
   nmap("<leader>D", vim.lsp.buf.type_definition, "Type [D]efinition")
-  nmap("<leader>ds", require("telescope.builtin").lsp_document_symbols, "[D]ocument [S]ymbols")
+  nmap("<leader>ds", Snacks.picker.lsp_symbols, "[D]ocument [S]ymbols")
 
   -- Lesser used LSP functionality
   nmap("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
