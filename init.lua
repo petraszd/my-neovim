@@ -261,7 +261,6 @@ require("nvim-treesitter.configs").setup({
   ignore_install = {},
 })
 
-
 -----------------
 -- Random keymaps
 -----------------
@@ -283,15 +282,31 @@ vim.keymap.set("i", "jj", "<C-n>")
 vim.keymap.set("n", "<leader>;", ":cn<CR>", { desc = "Next Buffer in Quickfix" })
 vim.keymap.set("n", "<leader>,", ":cp<CR>", { desc = "Prev Buffer in Quickfix" })
 
-vim.keymap.set("n", "<leader>fb", Snacks.picker.buffers, { desc = "Pick [B]uffer" })
-vim.keymap.set("n", "<leader>ff", Snacks.picker.files, { desc = "Pick [F]ile" })
-vim.keymap.set("n", "<leader>fg", Snacks.picker.grep, { desc = "Grep in the project" })
-vim.keymap.set("n", "<leader>f/", Snacks.picker.lines, { desc = "Grep in the current buffer" })
-vim.keymap.set("n", "<leader>fw", Snacks.picker.grep_word, { desc = "Grep files by current [W]ord" })
-vim.keymap.set("n", "<leader>fd", Snacks.picker.diagnostics_buffer, { desc = "[D]iagnostics in the current buffer" })
+vim.keymap.set("n", "<leader>fb", require("snacks").picker.buffers, { desc = "Pick [B]uffer" })
+vim.keymap.set("n", "<leader>ff", require("snacks").picker.files, { desc = "Pick [F]ile" })
+vim.keymap.set("n", "<leader>fg", function()
+  require("snacks").picker.grep({ hidden = true })
+end, { desc = "Grep in the project" })
+vim.keymap.set("n", "<leader>f/", require("snacks").picker.lines, { desc = "Grep in the current buffer" })
+vim.keymap.set("n", "<leader>fw", function()
+  require("snacks").picker.grep_word({ hidden = true })
+end, { desc = "Grep files by current [W]ord" })
+vim.keymap.set("n", "<leader>fd", require("snacks").picker.diagnostics_buffer, { desc = "[D]iagnostics in the current buffer" })
 vim.keymap.set("n", "<leader>r", function()
   require("pz/format").pz_format(vim.api.nvim_get_current_buf())
 end, { desc = "Fo[r]mat" })
+
+vim.keymap.set('n', '<leader>rr', function()
+  if package.loaded["pz/color_picker"] then
+    package.loaded["pz/color_picker"] = nil
+  end
+  require("pz/color_picker").open(0)
+end)
+
+vim.keymap.set("n" , "<leader>fc", function()
+  local bufnr = 0
+  require("pz/color_picker").open(bufnr)
+end, { desc = "Pick color in the buffer" })
 
 -- On LSP connects to a particular buffer.
 local on_attach = function(_ --[[ client ]], bufnr)
@@ -311,10 +326,10 @@ local on_attach = function(_ --[[ client ]], bufnr)
   nmap("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction")
 
   nmap("gd", vim.lsp.buf.definition, "[G]oto [D]efinition")
-  nmap("gr", function () Snacks.picker.lsp_references({ include_current = true }) end, "[G]oto [R]eferences")
+  nmap("gr", function () require("snacks").picker.lsp_references({ include_current = true }) end, "[G]oto [R]eferences")
   nmap("gI", vim.lsp.buf.implementation, "[G]oto [I]mplementation")
   nmap("<leader>D", vim.lsp.buf.type_definition, "Type [D]efinition")
-  nmap("<leader>ds", Snacks.picker.lsp_symbols, "[D]ocument [S]ymbols")
+  nmap("<leader>ds", require("snacks").picker.lsp_symbols, "[D]ocument [S]ymbols")
 
   -- Lesser used LSP functionality
   nmap("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
