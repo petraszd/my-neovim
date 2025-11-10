@@ -6,10 +6,11 @@ vim.opt.textwidth = 119
 vim.opt.number = true
 vim.opt.secure = true
 vim.opt.hlsearch = false
+vim.opt.expandtab = true
 vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
-vim.opt.expandtab = true
 vim.opt.shiftwidth = 4
+vim.opt.softtabstop = 4
 vim.opt.mouse = "a"
 vim.opt.breakindent = true
 vim.opt.undofile = true
@@ -42,6 +43,8 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
   callback = function()
     vim.opt.tabstop = 2
     vim.opt.shiftwidth = 2
+    vim.opt.shiftwidth = 2
+    vim.opt.softtabstop = 2
   end,
 })
 
@@ -408,6 +411,15 @@ local config_overrides = {
     local brew_prefix = string.gsub(vim.fn.system("brew --prefix"), "\n", "")
     local omnisharp_exe = brew_prefix .. "/bin/omnisharp/OmniSharp.exe"
     config.cmd = { "mono", omnisharp_exe }
+    return config
+  end,
+
+  gdscript = function(config)
+    local base_on_attach = config.on_attach
+    config.on_attach = function(client, bufnr)
+      base_on_attach(client, bufnr)
+      vim.opt.expandtab = true
+    end
     return config
   end,
 }
