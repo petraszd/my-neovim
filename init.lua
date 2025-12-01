@@ -245,6 +245,7 @@ require("nvim-treesitter.configs").setup({
     "lua",
     "python",
     "tsx",
+    "odin",
     "typescript",
     "javascript",
     "query",
@@ -294,7 +295,8 @@ vim.keymap.set("n", "<leader>f/", require("snacks").picker.lines, { desc = "Grep
 vim.keymap.set("n", "<leader>fw", function()
   require("snacks").picker.grep_word({ hidden = true })
 end, { desc = "Grep files by current [W]ord" })
-vim.keymap.set("n", "<leader>fd", require("snacks").picker.diagnostics_buffer, { desc = "[D]iagnostics in the current buffer" })
+vim.keymap.set("n", "<leader>fd", require("snacks").picker.diagnostics_buffer,
+  { desc = "[D]iagnostics in the current buffer" })
 vim.keymap.set("n", "<leader>r", function()
   require("pz/format").pz_format(vim.api.nvim_get_current_buf())
 end, { desc = "Fo[r]mat" })
@@ -306,7 +308,7 @@ vim.keymap.set('n', '<leader>rr', function()
   require("pz/color_picker").open(0)
 end)
 
-vim.keymap.set("n" , "<leader>fc", function()
+vim.keymap.set("n", "<leader>fc", function()
   local bufnr = 0
   require("pz/color_picker").open(bufnr)
 end, { desc = "Pick color in the buffer" })
@@ -329,7 +331,7 @@ local on_attach = function(_ --[[ client ]], bufnr)
   nmap("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction")
 
   nmap("gd", vim.lsp.buf.definition, "[G]oto [D]efinition")
-  nmap("gr", function () require("snacks").picker.lsp_references({ include_current = true }) end, "[G]oto [R]eferences")
+  nmap("gr", function() require("snacks").picker.lsp_references({ include_current = true }) end, "[G]oto [R]eferences")
   nmap("gI", vim.lsp.buf.implementation, "[G]oto [I]mplementation")
   nmap("<leader>D", vim.lsp.buf.type_definition, "Type [D]efinition")
   nmap("<leader>ds", require("snacks").picker.lsp_symbols, "[D]ocument [S]ymbols")
@@ -358,6 +360,7 @@ local servers = {
   cssls = {},
   gopls = {},
   gdscript = {},
+  ols = {},
   omnisharp = {},
   rust_analyzer = {
     ["rust-analyzer"] = {
