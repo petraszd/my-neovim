@@ -1,0 +1,7 @@
+local _M = {}
+
+function _M.run()
+  vim.print("This is a scratchpad")
+end
+
+return _M

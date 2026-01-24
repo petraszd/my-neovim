@@ -1,3 +1,4 @@
 .netrwhist
 lua/pz/custom_lsp_configs.lua
+lua/pz/scratchpad.lua
 lazy-lock.json

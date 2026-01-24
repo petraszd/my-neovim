@@ -301,6 +301,22 @@ vim.keymap.set("n", "<leader>r", function()
   require("pz/format").pz_format(vim.api.nvim_get_current_buf())
 end, { desc = "Fo[r]mat" })
 
+vim.keymap.set("n", "<F2>", function()
+  vim.cmd({ cmd = "messages", args = { "clear" } })
+
+  package.loaded["pz/scratchpad"] = nil
+  local success1, module = pcall(require, "pz/scratchpad")
+  if not success1 then
+    vim.print("ERR: There is no module: pz/scratchpad.")
+    return
+  end
+
+  local success2 = pcall(module.run)
+  if not success2 then
+    vim.print("ERR: pz/scratchpad has no `run` function.")
+  end
+end, { desc = "Scratchpad" })
+
 vim.keymap.set('n', '<leader>rr', function()
   if package.loaded["pz/color_picker"] then
     package.loaded["pz/color_picker"] = nil
