@@ -185,10 +185,22 @@ require("lazy").setup({
       "nvim-treesitter/nvim-treesitter-textobjects",
     },
     build = ":TSUpdate",
-  },
-
-  {
-    "nvim-treesitter/playground",
+    config = function()
+      local filetypes = {
+        "c",
+        "lua",
+        "python",
+        "tsx",
+        "odin",
+        "typescript",
+        "javascript",
+        "query",
+        "gdscript",
+        "vimdoc",
+        "rust",
+      }
+      require('nvim-treesitter').install(filetypes)
+    end
   },
 
   {
@@ -238,32 +250,7 @@ require("lazy").setup({
 -------------
 -- Treesitter
 -------------
-require("nvim-treesitter.configs").setup({
-  -- Add languages to be installed here that you want installed for treesitter
-  ensure_installed = {
-    "c",
-    "lua",
-    "python",
-    "tsx",
-    "odin",
-    "typescript",
-    "javascript",
-    "query",
-    "gdscript",
-    "vimdoc",
-    "rust",
-  },
-
-  auto_install = false,
-  indent = { enable = true },
-  highlight = {
-    enable = true,
-    additional_vim_regex_highlighting = false,
-  },
-  modules = {},
-  sync_install = false,
-  ignore_install = {},
-})
+require("nvim-treesitter").setup()
 
 -----------------
 -- Random keymaps
