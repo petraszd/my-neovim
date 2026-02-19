@@ -90,7 +90,7 @@ vim.cmd([[packadd cfilter]])
 
 -- Lazy Plugins
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not (vim.uv or vim.loop).fs_stat(lazypath) then
+if not vim.uv.fs_stat(lazypath) then
   local lazyrepo = "https://github.com/folke/lazy.nvim.git"
   local out = vim.fn.system({
     "git",
@@ -154,7 +154,6 @@ require("lazy").setup({
 
   {
     "folke/snacks.nvim",
-    ---@type snacks.Config
     opts = {
       picker = {
       },
@@ -264,13 +263,13 @@ require("lazy").setup({
 -------------
 -- Treesitter
 -------------
--- require("nvim-treesitter").setup()
--- vim.api.nvim_create_autocmd('FileType', {
---   pattern = treesitter_filetypes,
---   callback = function() vim.treesitter.start() end,
--- })
---
--- vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+require("nvim-treesitter").setup()
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = treesitter_filetypes,
+  callback = function() vim.treesitter.start() end,
+})
+
+vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
 
 -----------------
 -- Random keymaps
