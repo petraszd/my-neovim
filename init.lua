@@ -66,6 +66,19 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
 vim.opt.clipboard:append({ "unnamedplus" })
 vim.opt.completeopt = { "menu", "menuone", "noselect" }
 
+local treesitter_filetypes = {
+  "c",
+  "lua",
+  "python",
+  "tsx",
+  "odin",
+  "typescript",
+  "javascript",
+  "query",
+  "gdscript",
+  "vimdoc",
+  "rust",
+}
 
 ----------
 -- PLUGINS
@@ -76,17 +89,26 @@ vim.opt.completeopt = { "menu", "menuone", "noselect" }
 vim.cmd([[packadd cfilter]])
 
 -- Lazy Plugins
-
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
-  vim.fn.system {
+if not (vim.uv or vim.loop).fs_stat(lazypath) then
+  local lazyrepo = "https://github.com/folke/lazy.nvim.git"
+  local out = vim.fn.system({
     "git",
     "clone",
     "--filter=blob:none",
-    "git@github.com:folke/lazy.nvim.git",
-    "--branch=stable", -- latest stable release
+    "--branch=stable",
+    lazyrepo,
     lazypath,
-  }
+  })
+  if vim.v.shell_error ~= 0 then
+    vim.api.nvim_echo({
+      { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
+      { out,                            "WarningMsg" },
+      { "\nPress any key to exit..." },
+    }, true, {})
+    vim.fn.getchar()
+    os.exit(1)
+  end
 end
 vim.opt.rtp:prepend(lazypath)
 
@@ -134,7 +156,8 @@ require("lazy").setup({
     "folke/snacks.nvim",
     ---@type snacks.Config
     opts = {
-      picker = {},
+      picker = {
+      },
     }
   },
 
@@ -186,20 +209,11 @@ require("lazy").setup({
     },
     build = ":TSUpdate",
     config = function()
-      local filetypes = {
-        "c",
-        "lua",
-        "python",
-        "tsx",
-        "odin",
-        "typescript",
-        "javascript",
-        "query",
-        "gdscript",
-        "vimdoc",
-        "rust",
-      }
-      require('nvim-treesitter').install(filetypes)
+      require('nvim-treesitter').install(treesitter_filetypes):await(function(err, res)
+        if err ~= nil or res ~= true then
+          error("Error installing treesitter parsers. Most likely `tree-sitter` cmd is missing.")
+        end
+      end)
     end
   },
 
@@ -250,7 +264,13 @@ require("lazy").setup({
 -------------
 -- Treesitter
 -------------
-require("nvim-treesitter").setup()
+-- require("nvim-treesitter").setup()
+-- vim.api.nvim_create_autocmd('FileType', {
+--   pattern = treesitter_filetypes,
+--   callback = function() vim.treesitter.start() end,
+-- })
+--
+-- vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
 
 -----------------
 -- Random keymaps
@@ -376,7 +396,12 @@ local servers = {
   lua_ls = {
     Lua = {
       semantic = { enable = false },
-      workspace = { checkThirdParty = false },
+      workspace = {
+        checkThirdParty = false,
+        library = {
+          vim.env.VIMRUNTIME
+        },
+      },
       telemetry = { enable = false },
       diagnostics = { globals = { "vim" } },
       completion = {
