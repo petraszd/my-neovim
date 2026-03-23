@@ -38,7 +38,7 @@ end
 
 local function format_using_sql_formatter(bufnr)
   local filename = vim.api.nvim_buf_get_name(bufnr)
-  local cmd = { "sql-formatter", filename }
+  local cmd = { "pg_format", filename }
   manual_format(bufnr, cmd)
 end
 
