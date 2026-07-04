@@ -1,4 +1,6 @@
-vim.g.mapleader = " "
+vim.loader.enable()
+
+vim.g.mapleader = " "vim.loader.enable()
 vim.g.maplocalleader = " "
 vim.g.netrw_bufsettings = "noma nomod number nowrap ro nobl"
 
