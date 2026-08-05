@@ -49,7 +49,7 @@ local function is_prettier_buffer(bufnr)
   local clients = vim.lsp.get_clients({ bufnr = bufnr })
   for _, c in ipairs(clients) do
     -- Not sure if checking just for tsserver and eslint is good enough
-    if c.name == "tsserver" or c.name == "eslint" then
+    if c.name == "tsserver" or c.name == "eslint" or c.name == "ts_ls" then
       return true
     end
   end
