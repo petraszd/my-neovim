@@ -3,6 +3,8 @@ vim.loader.enable()
 vim.g.mapleader = " "vim.loader.enable()
 vim.g.maplocalleader = " "
 vim.g.netrw_bufsettings = "noma nomod number nowrap ro nobl"
+vim.g.netrw_sizestyle = "H"
+vim.g.netrw_liststyle = 1
 
 vim.opt.textwidth = 119
 vim.opt.number = true
