@@ -32,8 +32,11 @@ end
 
 local function format_using_prettier(bufnr)
   local filename = vim.api.nvim_buf_get_name(bufnr)
-  local cmd = { "prettier", filename }
-  manual_format(bufnr, cmd)
+  local cmd = "prettier"
+  if vim.uv.fs_stat("./node_modules/.bin/prettier") then
+    cmd = "./node_modules/.bin/prettier"
+  end
+  manual_format(bufnr, { cmd, filename })
 end
 
 local function format_using_sql_formatter(bufnr)
