@@ -1,6 +1,7 @@
 vim.loader.enable()
 
-vim.g.mapleader = " "vim.loader.enable()
+vim.g.mapleader = " "
+vim.loader.enable()
 vim.g.maplocalleader = " "
 vim.g.netrw_bufsettings = "noma nomod number nowrap ro nobl"
 vim.g.netrw_sizestyle = "H"
@@ -454,6 +455,15 @@ local config_overrides = {
       base_on_attach(client, bufnr)
       vim.opt.expandtab = true
     end
+    return config
+  end,
+
+  ts_ls = function(config)
+    config.init_options = {
+      preferences = {
+        importModuleSpecifierPreference = "relative",
+      },
+    }
     return config
   end,
 }
